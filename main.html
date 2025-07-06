@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정산 프로그램</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .main-container {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .main-container h1 {
+            margin-bottom: 30px;
+            color: #343a40;
+        }
+        .main-container .btn {
+            padding: 15px 30px;
+            font-size: 1.25rem;
+        }
+        .saved-data-list {
+            margin-top: 40px;
+            text-align: left;
+        }
+        .saved-data-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .saved-data-item:last-child {
+            border-bottom: none;
+        }
+        .saved-data-item .btn-group .btn {
+            padding: 5px 10px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1>여행 비용 정산 프로그램</h1>
+        <a href="index.html" class="btn btn-primary">정산 시작하기</a>
+
+        <div class="saved-data-list">
+            <h3 class="mt-5 mb-3">저장된 정산 데이터</h3>
+            <ul id="saved-files-list" class="list-group">
+                <!-- Saved files will be loaded here by JavaScript -->
+            </ul>
+            <p id="no-saved-data" class="text-muted mt-3" style="display: none;">저장된 데이터가 없습니다.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedFilesList = document.getElementById('saved-files-list');
+            const noSavedDataMessage = document.getElementById('no-saved-data');
+
+            function renderSavedFiles() {
+                savedFilesList.innerHTML = '';
+                const savedNames = JSON.parse(localStorage.getItem('expenseSplitterSavedNames') || '[]');
+
+                if (savedNames.length === 0) {
+                    noSavedDataMessage.style.display = 'block';
+                    return;
+                } else {
+                    noSavedDataMessage.style.display = 'none';
+                }
+
+                savedNames.forEach(name => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item saved-data-item';
+                    listItem.innerHTML = `
+                        <span>${name}</span>
+                        <div class="btn-group" role="group">
+                            <a href="index.html?load=${encodeURIComponent(name)}" class="btn btn-success btn-sm">불러오기</a>
+                            <button class="btn btn-danger btn-sm delete-saved-data" data-name="${name}">삭제</button>
+                        </div>
+                    `;
+                    savedFilesList.appendChild(listItem);
+                });
+
+                document.querySelectorAll('.delete-saved-data').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const nameToDelete = e.target.dataset.name;
+                        if (confirm(`'${nameToDelete}' 데이터를 정말 삭제하시겠습니까?`)) {
+                            localStorage.removeItem(`expenseSplitter_${nameToDelete}`);
+                            let currentSavedNames = JSON.parse(localStorage.getItem('expenseSplitterSavedNames') || '[]');
+                            currentSavedNames = currentSavedNames.filter(n => n !== nameToDelete);
+                            localStorage.setItem('expenseSplitterSavedNames', JSON.stringify(currentSavedNames));
+                            renderSavedFiles();
+                        }
+                    });
+                });
+            }
+
+            renderSavedFiles();
+        });
+    </script>
+</body>
+</html>

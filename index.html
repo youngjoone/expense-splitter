@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>여행 비용 정산</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">여행 비용 정산</h1>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">인원</h5>
+                <div id="members-container">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="이름" id="new-member-name">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button" id="add-member">추가</button>
+                        </div>
+                    </div>
+                </div>
+                <ul id="members-list" class="list-group"></ul>
+            </div>
+        </div>
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">비용</h5>
+                <div class="form-group">
+                    <label for="expense-description">내용</label>
+                    <input type="text" class="form-control" id="expense-description" placeholder="예: 저녁 식사">
+                </div>
+                <div class="form-group">
+                    <label for="expense-amount">금액</label>
+                    <input type="number" class="form-control" id="expense-amount" placeholder="예: 50000">
+                </div>
+                <div id="expense-members" class="mb-3">
+                    <label>참여자</label>
+                </div>
+                <button class="btn btn-success" id="add-expense">비용 추가</button>
+            </div>
+        </div>
+        <div id="capture-area">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">비용 내역</h5>
+                    <div id="expense-breakdown-list"></div>
+                </div>
+            </div>
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">비용 상세 내역 (엑셀 형식)</h5>
+                    <div id="excel-summary-area"></div>
+                </div>
+            </div>
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">정산 결과</h5>
+                    <div id="transfer-summary-body"></div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4">
+            <button class="btn btn-primary" id="save-data">데이터 저장하기</button>
+            <button class="btn btn-info" id="save-as-image">결과 이미지로 저장</button>
+            <a href="main.html" class="btn btn-secondary">메인 페이지로 돌아가기</a>
+        </div>
+    </div>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
